@@ -3,8 +3,9 @@ pragma solidity ^0.8.0;
 
 import "./IERC20Mint.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableMap.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract ACDMPlatform {
+contract ACDMPlatform is ReentrancyGuard {
 
     using EnumerableMap for EnumerableMap.UintToAddressMap;
 
@@ -85,9 +86,12 @@ contract ACDMPlatform {
         if(totalSales != 0) sales[totalSales].price = sales[totalSales-1].price * 10300 / percentDivider + 4000000000000;
 
         sales[totalSales].toSale = (lastTradeValue / sales[totalSales].price) * 10 ** IERC20Mint(token).decimals() ;
-        sales[totalSales].startTime = block.timestamp;
         sales[totalSales].active = true;
-        IERC20Mint(token).mint(address(this),sales[totalSales].toSale);
+        if (sales[totalSales].toSale == 0) sales[totalSales].startTime = 0;
+        else {
+            sales[totalSales].startTime = block.timestamp;
+            IERC20Mint(token).mint(address(this),sales[totalSales].toSale);
+        }
 
         uint amountActiveOrders = activeOrders.length();
         
@@ -119,7 +123,7 @@ contract ACDMPlatform {
         emit StartTradeRound(totalTrades);
     }
 
-    function buyACDM() payable public {
+    function buyACDM() payable public nonReentrant {
         require(sales[totalSales].active == true, "ACDMPlatform::buyACDM:sale round is not active");
         
         uint amountToBuy = (msg.value / sales[totalSales].price) * 10 ** IERC20Mint(token).decimals();
@@ -158,7 +162,7 @@ contract ACDMPlatform {
         emit RemoveOrder(_orderId);
     }
 
-    function redeemOrder(uint _orderId) payable public {
+    function redeemOrder(uint _orderId) payable public nonReentrant {
         require(activeOrders.contains(_orderId) == true, "ACDMPlatform::redeemOrder:orderId not found");
 
         uint amountToBuy = (msg.value / orders[_orderId].priceInEth) * 10 ** IERC20Mint(token).decimals();

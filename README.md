@@ -1,5 +1,6 @@
 # Contracts
 ## Kovan
+UPD(10.04): 
 [Platform](https://kovan.etherscan.io/address/0xd89bf684170185970caf98e1bb863457a28b1277)
 Address: 0xd89bf684170185970caf98e1bb863457a28b1277
 # Tasks

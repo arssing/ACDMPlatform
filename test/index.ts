@@ -30,7 +30,7 @@ describe("DAO-tests", function () {
     
   });
 
-  it("startSaleRound", async function () {
+  it("startSaleRound, startTradeRound, buyACDM, addOrder, removeOrder, redeemOrder", async function () {
     const provider = waffle.provider;
     const [owner, user1, user2, user3, user4, user5] = await ethers.getSigners();
 
@@ -139,6 +139,9 @@ describe("DAO-tests", function () {
     ).to.be.revertedWith("ACDMPlatform::redeemOrder:orderId not found");
 
     await ethers.provider.send("evm_increaseTime", [3600]);
+    await acdm.startTradeRound();
+    await ethers.provider.send("evm_increaseTime", [3600]);
+    await acdm.startSaleRound();
     await acdm.startTradeRound();
   });
 
