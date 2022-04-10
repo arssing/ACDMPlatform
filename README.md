@@ -3,10 +3,9 @@
 UPD(10.04): 
 
 [Platform](https://kovan.etherscan.io/address/0xF001F6443DbaCa52980c9E95D89B97FFD5542D34)
+
 Address: 0xF001F6443DbaCa52980c9E95D89B97FFD5542D34
 
-[Platform](https://kovan.etherscan.io/address/0xd89bf684170185970CaF98e1bb863457a28b1277)
-Address: 0xd89bf684170185970CaF98e1bb863457a28b1277
 # Tasks
 ```shell
 npx hardhat start-sale --address 0xF001F6443DbaCa52980c9E95D89B97FFD5542D34
